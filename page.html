@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+    <div class="h-screen w-full flex justify-center items-center">
+      <div class="flex flex-col p-12 shadow-xl max-w-7xl space-y-4">
+        <div class="text-center text-4xl">ToDo List</div>
+        <div class="flex w-full space-x-2">
+          <input
+            type="text"
+            class="flex border px-2"
+            id="note"
+            maxlength="30"
+          />
+          <button
+            class="bg-slate-700 text-white px-3 py-0.5 cursor-pointer active:scale-105"
+          >
+            Add Note
+          </button>
+        </div>
+        <ul id="notes" class="list-disc list-inside">
+          <!-- add notes -->
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
