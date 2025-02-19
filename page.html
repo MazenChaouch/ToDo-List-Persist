@@ -7,7 +7,11 @@
   </head>
   <body>
     <div class="h-screen w-full flex justify-center items-center">
-      <div class="flex flex-col p-12 shadow-xl max-w-7xl space-y-4">
+      <form
+        id="form"
+        class="flex flex-col p-12 max-w-7xl space-y-4"
+        onsubmit="addNote(event)"
+      >
         <div class="text-center text-4xl">ToDo List</div>
         <div class="flex w-full space-x-2">
           <input
@@ -17,15 +21,17 @@
             maxlength="30"
           />
           <button
+            type="submit"
             class="bg-slate-700 text-white px-3 py-0.5 cursor-pointer active:scale-105"
           >
             Add Note
           </button>
         </div>
-        <ul id="notes" class="list-disc list-inside">
+        <ul id="notes" class="list-disc list-inside space-y-1">
           <!-- add notes -->
         </ul>
-      </div>
+      </form>
     </div>
+    <script src="script.js"></script>
   </body>
 </html>
