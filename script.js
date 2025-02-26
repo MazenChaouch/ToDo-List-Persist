@@ -1,7 +1,6 @@
 const notesList = JSON.parse(localStorage.getItem("notesList")) || [];
-
 document.addEventListener("DOMContentLoaded", refreshNotes);
-
+const note = new Note(note.value);
 function addNote(event) {
   event.preventDefault();
   const note = document.getElementById("note");
@@ -24,7 +23,7 @@ function deleteNote(index) {
   localStorage.setItem("notesList", JSON.stringify(notesList));
   refreshNotes();
 }
-
+[1, 2, 3];
 function refreshNotes() {
   const notes = document.getElementById("notes");
   notes.innerHTML = "";
