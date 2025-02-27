@@ -37,7 +37,9 @@ class NotesApp {
 
   loadFromLocalStorage() {
     const savedNotes = JSON.parse(localStorage.getItem("notes")) || [];
-    return savedNotes.map((note) => new Note(note.text, note.checked)); // Ensures correct class instances
+    return savedNotes != []
+      ? savedNotes.map((note) => new Note(note.text, note.checked))
+      : savedNotes;
   }
 
   renderNotes() {
@@ -45,8 +47,12 @@ class NotesApp {
     notes.innerHTML = "";
     this.notesList.forEach((note, i) => {
       const li = document.createElement("li");
-      li.onclick = () => this.toggleNote(i);
-      li.classList.toggle;
+      const span = document.createElement("span");
+      const deleteButton = document.createElement("button");
+      span.textContent = note.text;
+      if (note.checked) {
+        span.classList.add("line-through");
+      }
       li.classList.add(
         "flex",
         "justify-between",
@@ -56,12 +62,24 @@ class NotesApp {
         "rounded",
         "border-red-900",
       );
-      li.innerHTML = `<span class="${note.checked ? "line-through" : ""}">${
-        note.text
-      }</span>
-        <button onclick='NoteApp.deleteNote(${i})' 
-        class='bg-red-500/90 py-0.5 px-2 rounded text-white text-xs cursor-pointer' 
-        type='button'>delete</button>`;
+      deleteButton.classList.add(
+        "bg-red-500/90",
+        "py-0.5",
+        "px-2",
+        "rounded",
+        "text-white",
+        "text-xs",
+        "cursor-pointer",
+      );
+      deleteButton.textContent = "delete";
+      deleteButton.type = "button";
+      span.addEventListener("click", () => this.toggleNote(i));
+      deleteButton.addEventListener("click", () => {
+        NoteApp.deleteNote(i);
+      });
+
+      li.appendChild(span);
+      li.appendChild(deleteButton);
       notes.appendChild(li);
     });
   }
@@ -69,8 +87,6 @@ class NotesApp {
 
 const NoteApp = new NotesApp();
 document.addEventListener("DOMContentLoaded", () => load());
-
-console.log(NoteApp.notesList);
 
 function load() {
   console.log("i'm here");

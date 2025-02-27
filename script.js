@@ -1,6 +1,6 @@
 const notesList = JSON.parse(localStorage.getItem("notesList")) || [];
 document.addEventListener("DOMContentLoaded", refreshNotes);
-const note = new Note(note.value);
+document.getElementById("form").addEventListener("submit", (e) => addNote(e));
 function addNote(event) {
   event.preventDefault();
   const note = document.getElementById("note");
@@ -12,10 +12,11 @@ function addNote(event) {
   refreshNotes();
 }
 
-function checkToDo(li, i) {
-  li.querySelector("span").classList.toggle("line-through");
+function checkToDo(i) {
+  console.log(i);
   notesList[i].checked = !notesList[i].checked;
   localStorage.setItem("notesList", JSON.stringify(notesList));
+  refreshNotes();
 }
 
 function deleteNote(index) {
@@ -23,14 +24,13 @@ function deleteNote(index) {
   localStorage.setItem("notesList", JSON.stringify(notesList));
   refreshNotes();
 }
-[1, 2, 3];
+
 function refreshNotes() {
   const notes = document.getElementById("notes");
   notes.innerHTML = "";
   notesList.forEach((note, i) => {
     const li = document.createElement("li");
-    li.onclick = () => checkToDo(li, i);
-    li.classList.toggle;
+    li.onclick = () => checkToDo(i);
     li.classList.add(
       "flex",
       "justify-between",
