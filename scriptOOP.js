@@ -1,9 +1,8 @@
 class Note {
-  constructor(text) {
+  constructor(text, checked = false) {
     this.text = text;
-    this.checked = false;
+    this.checked = checked;
   }
-
   toggleCheck() {
     this.checked = !this.checked;
   }
@@ -13,46 +12,37 @@ class NotesApp {
   constructor() {
     this.notesList = this.loadFromLocalStorage();
   }
-
   addNote(text) {
     const note = new Note(text);
     this.notesList.push(note);
+    this.saveToLocalStorage();
+    this.renderNotes();
   }
-
   deleteNote(index) {
     this.notesList.splice(index, 1);
     this.saveToLocalStorage();
     this.renderNotes();
   }
-
   toggleNote(index) {
     this.notesList[index].toggleCheck();
     this.saveToLocalStorage();
     this.renderNotes();
   }
-
   saveToLocalStorage() {
     localStorage.setItem("notes", JSON.stringify(this.notesList));
   }
-
   loadFromLocalStorage() {
-    const savedNotes = JSON.parse(localStorage.getItem("notes")) || [];
-    return savedNotes != []
-      ? savedNotes.map((note) => new Note(note.text, note.checked))
-      : savedNotes;
+    const notes = JSON.parse(localStorage.getItem("notes")) || [];
+    console.log(notes);
+    const finalNotes = notes.map((note) => new Note(note.text, note.checked));
+    console.log(finalNotes);
+    return finalNotes;
   }
-
   renderNotes() {
     const notes = document.getElementById("notes");
     notes.innerHTML = "";
     this.notesList.forEach((note, i) => {
       const li = document.createElement("li");
-      const span = document.createElement("span");
-      const deleteButton = document.createElement("button");
-      span.textContent = note.text;
-      if (note.checked) {
-        span.classList.add("line-through");
-      }
       li.classList.add(
         "flex",
         "justify-between",
@@ -62,7 +52,15 @@ class NotesApp {
         "rounded",
         "border-red-900",
       );
-      deleteButton.classList.add(
+      const span = document.createElement("span");
+      span.textContent = note.text;
+      if (note.checked) {
+        span.classList.add("line-through");
+      }
+      span.onclick = () => this.toggleNote(i);
+      li.appendChild(span);
+      const btn = document.createElement("button");
+      btn.classList.add(
         "bg-red-500/90",
         "py-0.5",
         "px-2",
@@ -71,34 +69,21 @@ class NotesApp {
         "text-xs",
         "cursor-pointer",
       );
-      deleteButton.textContent = "delete";
-      deleteButton.type = "button";
-      span.addEventListener("click", () => this.toggleNote(i));
-      deleteButton.addEventListener("click", () => {
-        NoteApp.deleteNote(i);
-      });
-
-      li.appendChild(span);
-      li.appendChild(deleteButton);
+      btn.textContent = "delete";
+      btn.type = "button";
+      btn.onclick = () => this.deleteNote(i);
+      li.appendChild(btn);
       notes.appendChild(li);
     });
   }
 }
+const app = new NotesApp();
 
-const NoteApp = new NotesApp();
-document.addEventListener("DOMContentLoaded", () => load());
+document.addEventListener("DOMContentLoaded", app.renderNotes());
 
-function load() {
-  console.log("i'm here");
-  NoteApp.loadFromLocalStorage();
-  NoteApp.renderNotes();
-}
-
-document.getElementById("form").addEventListener("submit", (e) => {
-  e.preventDefault();
+document.getElementById("form").addEventListener("submit", (s) => {
+  s.preventDefault();
   const note = document.getElementById("note");
-  NoteApp.addNote(note.value);
+  app.addNote(note.value);
   note.value = "";
-  NoteApp.saveToLocalStorage();
-  load();
 });
